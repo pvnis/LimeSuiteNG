@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <cstring>
+#include <chrono>
 
 namespace lime {
 
@@ -172,6 +173,8 @@ template<uint8_t chCount> class SamplesPacket
 
   public:
     uint64_t timestamp; ///< The timestamp of the packet.
+    // the chrono time point of the packet
+    std::chrono::steady_clock::time_point chronoTimestamp;
 
   private:
     uint8_t* head[chCount];

@@ -96,6 +96,8 @@ file(TO_CMAKE_PATH "${LIME_SUITE_ROOT}" LIME_SUITE_ROOT)
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_COMPILER "clang")
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 #is this processor x86? set variable X86
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "i686.*|i386.*|x86.*|amd64.*|AMD64.*")
@@ -127,7 +129,8 @@ endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     #enable warnings
-    add_compile_options(-Wall -Wpedantic)
+    #add_compile_options(-Wall -Wpedantic)
+    #add_compile_options(-Wno-implicit-function-declaration)
 
     #symbols are only exported from libraries/modules explicitly
     add_compile_options(-fvisibility=hidden)
@@ -272,6 +275,11 @@ if(CMAKE_AUTOSET_INSTALL_RPATH)
         set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}")
     endif("${isSystemDir}" STREQUAL "-1")
 endif(CMAKE_AUTOSET_INSTALL_RPATH)
+
+
+# Boost
+find_package(Boost REQUIRED)
+
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH

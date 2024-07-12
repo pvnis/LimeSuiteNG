@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <iostream>
+#include "../protocols/TRXLooper.h"
 
 using namespace lime;
 using namespace std::literals::string_literals;
@@ -62,6 +63,14 @@ SDRDevice* DeviceRegistry::makeDevice(const DeviceHandle& handle)
 
 void DeviceRegistry::freeDevice(SDRDevice* device)
 {
+    // print the statistics of the TX queue time
+    printf("Buffer TX queueing statstics: 25th quantile %f ns, 50th quantile %f ns, 75th quantile %f ns, 99th quantile %f ns\n",
+           ba::quantile(tx_queue_time_acc, ba::quantile_probability = 0.25),
+           ba::quantile(tx_queue_time_acc, ba::quantile_probability = 0.50),
+           ba::quantile(tx_queue_time_acc, ba::quantile_probability = 0.75),
+           ba::quantile(tx_queue_time_acc, ba::quantile_probability = 0.99)
+           );
+           
     //some client code may end up freeing a null connection
     if (device == nullptr)
         return;

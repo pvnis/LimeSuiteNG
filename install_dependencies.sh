@@ -48,7 +48,7 @@ elif [[ $TYPE == "debian" ]]; then
   headers="linux-headers-generic"
 fi
 
-yes=""
+yes="-y"
 if [[ ${1-} == "-y" ]]; then
   yes="-y"
 fi

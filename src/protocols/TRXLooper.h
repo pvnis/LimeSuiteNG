@@ -13,7 +13,21 @@
 #include "memory/MemoryPool.h"
 #include "SamplesPacket.h"
 
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/median.hpp>
+#include <boost/accumulators/statistics/tail_quantile.hpp>
+#include <boost/accumulators/statistics/p_square_quantile.hpp>
+#include <boost/accumulators/statistics.hpp>
+
 namespace lime {
+
+namespace ba = boost::accumulators;
+namespace bat = boost::accumulators::tag;
+
+using accumulator_t = ba::accumulator_set<double, ba::stats<bat::extended_p_square_quantile>>;
+extern accumulator_t tx_queue_time_acc;
 
 class FPGA;
 class IDMA;

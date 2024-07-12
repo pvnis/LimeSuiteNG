@@ -19,6 +19,9 @@
 
 using namespace std::literals::string_literals;
 
+boost::array<double, 10> probs = {0.10, 0.25, 0.50, 0.75, 0.90, 0.95, 0.98, 0.99, 0.995, 1.00};
+lime::accumulator_t lime::tx_queue_time_acc(ba::extended_p_square_probabilities = probs);
+
 namespace lime {
 using namespace LMS7002MCSR_Data;
 using namespace std::chrono;
@@ -934,6 +937,9 @@ void TRXLooper::TransmitPacketsLoop()
                 }
             }
 
+            // check the queuing time by comparing the timestamp of the packet
+            tx_queue_time_acc(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - srcPkt->chronoTimestamp).count());
+
             // drop old packets before forming, Rx is needed to get current timestamp
             if (srcPkt->useTimestamp && isRxActive)
             {
@@ -1123,6 +1129,7 @@ template<class T> uint32_t TRXLooper::StreamTxTemplate(const T* const* samples, 
             mTx.stagingPacket->Reset();
             mTx.stagingPacket->timestamp = ts;
             mTx.stagingPacket->useTimestamp = useTimestamp;
+            mTx.stagingPacket->chronoTimestamp = std::chrono::steady_clock::now();
         }
 
         int consumed = mTx.stagingPacket->push(src, samplesRemaining);
