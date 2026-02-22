@@ -319,7 +319,13 @@ OpStatus LiteXM2SDR::InitHardware(bool doInit)
             sizeof(si5351_xo_38p4m_config) / sizeof(si5351_xo_38p4m_config[0]));
 #endif
 
-        // Power up and reset AD9361 via GPIO
+        // Set default PHY timing mode (0 = 2T2R, matching default_init_param)
+        litepcie_writel(mFd, CSR_AD9361_PHY_CONTROL_ADDR, 0);
+
+        // Power up AD9361 (enable power + deassert reset via CONFIG register)
+        litepcie_writel(mFd, CSR_AD9361_CONFIG_ADDR, 0b11);
+
+        // Reset AD9361 SPI master and assert/deassert RESETB
         m2sdr_ad9361_spi_init(conn, 1);
     }
 
