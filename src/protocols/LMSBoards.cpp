@@ -41,6 +41,7 @@ static constexpr std::array<const std::string_view, LMS_DEV_COUNT> LMS_DEV_NAMES
     "XSDR"sv,
     ""sv,
     "SSDR"sv,
+    "M2SDR"sv,
 };
 
 const std::string_view GetDeviceName(const eLMS_DEV device)

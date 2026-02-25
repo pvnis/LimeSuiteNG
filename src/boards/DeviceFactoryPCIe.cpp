@@ -14,6 +14,7 @@
 #include "boards/sSDR/sSDR.h"
 #include "boards/LimeSDR_X3/LimeSDR_X3.h"
 #include "boards/MMX8/MM_X8.h"
+#include "boards/M2SDR/M2SDR.h"
 
 #include <algorithm>
 
@@ -119,6 +120,8 @@ SDRDevice* DeviceFactoryPCIe::make(const DeviceHandle& handle)
     case LMS_DEV_LIMESDR_MMX8: {
         return new LimeSDR_MMX8(controlPipe, std::move(streamPorts));
     }
+    case LMS_DEV_M2SDR:
+        return new M2SDR(controlPort, streamPorts.empty() ? nullptr : streamPorts.front());
     default:
         lime::ReportError(OpStatus::InvalidValue, "Unrecognized device ID (%i)", fw.deviceId);
         return nullptr;
